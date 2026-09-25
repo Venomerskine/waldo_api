@@ -13,13 +13,14 @@
   "name": "waldo_api",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-  "dev": "nodemon src/index.js",
-  "start": "node src/index.js",
-  "prisma:generate": "prisma generate",
-  "prisma:migrate": "prisma migrate dev",
-  "prisma:studio": "prisma studio"
-},
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Venomerskine/waldo_api.git"
