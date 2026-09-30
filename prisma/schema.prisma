@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model characters {
+  id         Int     @id @default(autoincrement())
+  name       String  @db.VarChar(100)
+  x_position Decimal @db.Decimal
+  y_position Decimal @db.Decimal
+}
