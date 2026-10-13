@@ -6,9 +6,35 @@ datasource db {
   provider = "postgresql"
 }
 
-model characters {
-  id         Int     @id @default(autoincrement())
-  name       String  @db.VarChar(100)
-  x_position Decimal @db.Decimal
-  y_position Decimal @db.Decimal
+model Character {
+  id          Int              @id @default(autoincrement())
+  name        String
+  description String?
+  imageUrl    String?
+  createdAt   DateTime         @default(now())
+  scenes      SceneCharacter[]
+}
+
+model Scene {
+  id          Int              @id @default(autoincrement())
+  name        String
+  imageUrl    String?
+  width       Int
+  height      Int
+  description String?
+  createdAt   DateTime         @default(now())
+  characters  SceneCharacter[]
+}
+
+model SceneCharacter {
+  id          Int       @id @default(autoincrement())
+  sceneId     Int
+  characterId Int
+  xPosition   Decimal
+  yPosition   Decimal
+  radius      Decimal
+  character   Character @relation(fields: [characterId], references: [id])
+  scene       Scene     @relation(fields: [sceneId], references: [id])
+
+  @@unique([sceneId, characterId])
 }
