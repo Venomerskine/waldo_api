@@ -1,8 +1,14 @@
-import prisma from '../../prisma/prismaClient';
+import prisma from '../lib/prisma.js';
 
 // get allgames
 
 export const getAllGames = async (req, res) => {
-    games = await prisma.scene.findMany()
-    console.log(games)
+    try {
+        const games = await prisma.scene.findMany()
+        res.json(games)
+    } catch(err){
+        console.error("Error Loading Games: ", err)
+        res.status(500).json({message: "Internal server erro"})
+    }
+    
 }
