@@ -1,9 +1,9 @@
 import express from "express"
 
-import {getAllGames} from "../controllers/gameController.js"
+import {getAllScenes} from "../controllers/gameController.js"
 
 const router = express.Router();
 
-router.get("/", getAllGames)
+router.get("/", getAllScenes)
 
 export default router;

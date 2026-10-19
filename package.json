@@ -10,6 +10,7 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.12.1",
     "pg": "^8.23.1",
+    "url": "^0.11.4",
     "zod": "^4.6.5"
   },
   "name": "waldo_api",

@@ -1,15 +1,15 @@
 import prisma from '../lib/prisma.js';
 
-// get allgames
+// get all scenes
 
-export const getAllGames = async (req, res) => {
+export const getAllScenes = async (req, res) => {
     try {
-        const games = await prisma.scene.findMany()
-        console.log(games)
-        res.json(games)
+        const scenes = await prisma.scene.findMany()
+        console.log("Scenes", scenes)
+        res.json(scenes)
     } catch(err){
-        console.error("Error Loading Games: ", err)
-        res.status(500).json({message: "Internal server erro"})
+        console.error("Error Loading Scenes: ", err)
+        res.status(500).json({message: "Internal server error"})
     }
     
 }
