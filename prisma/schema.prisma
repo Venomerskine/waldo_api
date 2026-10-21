@@ -33,8 +33,9 @@ model SceneCharacter {
   xPosition   Decimal
   yPosition   Decimal
   radius      Decimal
-  character   Character @relation(fields: [characterId], references: [id])
-  scene       Scene     @relation(fields: [sceneId], references: [id])
+  
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  scene       Scene     @relation(fields: [sceneId], references: [id], onDelete: Cascade)
 
   @@unique([sceneId, characterId])
 }

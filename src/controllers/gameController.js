@@ -5,7 +5,13 @@ import prisma from '../lib/prisma.js';
 // Get all scenes from the database
 export const getAllScenes = async (req, res) => {
     try {
-        const scenes = await prisma.scene.findMany()
+        const scenes = await prisma.scene.findMany({
+            include: {
+                characters: {
+                    include: { character: true },
+                },
+            },
+        })
         console.log("Scenes", scenes)
         res.json(scenes)
     } catch(err){
@@ -19,12 +25,16 @@ export const getAllScenes = async (req, res) => {
 // Get a specific scene and its details (include characters) by ID
 
 export const getSceneById = async (req, res) => {
-    console.log("Req params :", req.params.sceneId)
+    // console.log("Req params :", req.params.sceneId)
     const sceneId = req.params.sceneId;
     try {
         const scene = await prisma.scene.findUnique({
             where: { id: parseInt(sceneId) },
-            include: { characters: true }
+            include: {
+                characters: {
+                    include: { character: true },
+                },
+            },
         });
         if (!scene) {
             return res.status(404).json({ message: "Scene not found" });
