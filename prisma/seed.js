@@ -9,7 +9,7 @@ const imageRoot = "/images/";
 
 const sceneSeeds = [
   {
-    name: "beach",
+    name: "Beach",
     imageUrl: `${imageRoot}Wheres-Waldo-Beach-Super-High-Resolution-scaled-B27IRiag.jpg`,
     width: 2560,
     height: 1644,
@@ -23,7 +23,7 @@ const sceneSeeds = [
     ],
   },
   {
-    name: "skiing",
+    name: "Skiing",
     imageUrl: `${imageRoot}Wheres-Waldo-Skiing-Super-High-Resolution-scaled-D5V0lf3M.jpg`,
     width: 2560,
     height: 1623,
@@ -35,7 +35,7 @@ const sceneSeeds = [
     ],
   },
   {
-    name: "candy",
+    name: "Candy",
     imageUrl: `${imageRoot}Wheres-Waldo-Candy-Factory-Super-High-Resolution-scaled--og3HhZR.jpg`,
     width: 2560,
     height: 1791,
@@ -46,7 +46,7 @@ const sceneSeeds = [
     ],
   },
   {
-    name: "space",
+    name: "Space",
     imageUrl: `${imageRoot}Wheres-Waldo-Space-Station-Super-High-Resolution-scaled-BvxewwE6.jpg`,
     width: 2560,
     height: 1685,
