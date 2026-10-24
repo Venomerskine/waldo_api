@@ -67,3 +67,73 @@ export const getSceneById = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+export const verifyGuess = async (req, res) => {
+    const sceneId = Number(req.params.sceneId)
+    console.log("SceneId", sceneId)
+
+    console.log(req.body)
+    const characterId = req.body.character.characterId
+    const {x, y} = req.body.clickedPosition
+
+    console.log(characterId, x, y)
+
+    if(
+        !Number.isInteger(sceneId) ||
+        !Number.isInteger(characterId) ||
+        !Number.isFinite(x) ||
+        !Number.isFinite(y)
+        )
+     {
+        return res.status(400).json({
+            message: "Invalid guess data"
+        });
+    }
+
+    try {
+
+        const target = await prisma.sceneCharacter.findUnique({
+            where: {
+                sceneId_characterId: {
+                    sceneId,
+                    characterId,
+                },
+            },
+            select: {
+                xPosition: true,
+                yPosition: true,
+                radius: true,
+            },
+        });
+
+        console.log(target)
+
+
+
+        if (!target) {
+            return res.status(404).json({
+                message: "Character not found in this scene",
+            });
+        }
+
+        const targetX = Number(target.xPosition);
+        const targetY = Number(target.yPosition);
+        const radius = Number(target.radius);
+
+        const dx = x-targetX
+        const dy = y-targetY
+
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const found = distance <= radius;
+
+        return res.json({ found })
+
+    } catch (err) {
+        console.error("Error verifying guess:", err);
+        return res.status(500).json({
+            message: "Internal Server Error!"
+        })
+    }
+
+}
