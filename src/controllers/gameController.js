@@ -163,14 +163,14 @@ export const startGame = async (req, res, next) => {
                 data: {
                     sceneId,
                     status: "IN_PROGRESS",
-                    sessionCharacters: {
+                    gameSessionCharacters: {
                         create: targets.map((target) => ({
                             sceneCharacterId: target.id,
                         }))
                     },
                 },
                 include: {
-                    sessionCharacters: true,
+                    gameSessionCharacters: true,
                 }
             })
          });
@@ -178,7 +178,7 @@ export const startGame = async (req, res, next) => {
          return res.status(201).json({
             gameId: game.id,
             status: game.status,
-            remainingCount: game.sessionCharacters.length
+            remainingCount: game.gameSessionCharacters.length
          })
 } catch (error) {
     if (error.message === "Scene has no Targets") {
