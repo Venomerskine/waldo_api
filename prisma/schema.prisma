@@ -1,3 +1,9 @@
+enum Status {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -16,26 +22,54 @@ model Character {
 }
 
 model Scene {
-  id          Int              @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   imageUrl    String?
   width       Int
   height      Int
   description String?
-  createdAt   DateTime         @default(now())
-  characters  SceneCharacter[]
+  createdAt   DateTime @default(now())
+
+  characters   SceneCharacter[]
+  gameSessions GameSession[]
 }
 
 model SceneCharacter {
-  id          Int       @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   sceneId     Int
   characterId Int
   xPosition   Decimal
   yPosition   Decimal
   radius      Decimal
-  
-  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
-  scene       Scene     @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  scene     Scene     @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  gameSessionCharacters GameSessionCharacter[]
 
   @@unique([sceneId, characterId])
+}
+
+// Game session, id, sceneId, satartedAt, completedAt(nullable), status (enum: IN_PROGRESS, COMPLETED, ABANDONED), score (nullable).
+model GameSession {
+  id          Int       @id @default(autoincrement())
+  sceneId     Int
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+  status      Status    @default(IN_PROGRESS)
+  score       Int?
+
+  scene      Scene                  @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  characters GameSessionCharacter[]
+}
+
+// GameSessionCharacter, id, gameSessionId, sceneCharacterId, foundAt(nullable)
+model GameSessionCharacter {
+  id               Int       @id @default(autoincrement())
+  gameSessionId    Int
+  sceneCharacterId Int
+  foundAt          DateTime?
+
+  gameSession    GameSession    @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  sceneCharacter SceneCharacter @relation(fields: [sceneCharacterId], references: [id], onDelete: Cascade)
 }

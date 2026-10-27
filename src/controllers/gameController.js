@@ -137,3 +137,53 @@ export const verifyGuess = async (req, res) => {
     }
 
 }
+
+
+// Start Game
+
+export const startGame = async (req, res, next) => {
+    try {
+        const sceneId = Number(req.params.sceneId)
+
+        if (!Number.isInteger(sceneId) || sceneId <= 0) {
+            return res.status(400).json({ message: "Invalid scene ID" });
+        }
+
+        const game = await prisma.$transaction(async (tx) => {
+            const targets = await tx.sceneCharacter.findMany({
+                where: { sceneId },
+                select: { id: true},
+            });
+          
+            if (targets.length === 0) {
+                throw new Error("Scene has no Targets")
+            }
+
+            return tx.gameSession.create({
+                data: {
+                    sceneId,
+                    status: "IN_PROGRESS",
+                    sessionCharacters: {
+                        create: targets.map((target) => ({
+                            sceneCharacterId: target.id,
+                        }))
+                    },
+                },
+                include: {
+                    sessionCharacters: true,
+                }
+            })
+         });
+
+         return res.status(201).json({
+            gameId: game.id,
+            status: game.status,
+            remainingCount: game.sessionCharacters.length
+         })
+} catch (error) {
+    if (error.message === "Scene has no Targets") {
+        return res.status(400).json({ message: "Scene has no targets" });
+    }
+    next(error)
+}
+};
