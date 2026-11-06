@@ -72,4 +72,6 @@ model GameSessionCharacter {
 
   gameSession    GameSession    @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
   sceneCharacter SceneCharacter @relation(fields: [sceneCharacterId], references: [id], onDelete: Cascade)
+
+  @@unique([gameSessionId, sceneCharacterId])
 }
