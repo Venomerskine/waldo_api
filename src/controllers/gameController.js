@@ -157,6 +157,11 @@ export const verifyGuess = async (req, res, next) => {
                     }
                 }
             })
+
+            console.log("Get Remaining Targets - Remaining Targets: ", targets.map(({ sceneCharacterId, sceneCharacter }) => ({
+                sceneCharacterId, 
+                characterId: sceneCharacter.characterId,
+            })))
             return targets.map(({ sceneCharacterId, sceneCharacter }) => ({
                 sceneCharacterId, 
                 characterId: sceneCharacter.characterId,
