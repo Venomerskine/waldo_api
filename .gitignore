@@ -1,2 +1,12 @@
 node_modules/
 .env
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Generated output
+dist/

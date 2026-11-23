@@ -141,9 +141,9 @@ export const verifyGuess = async (req, res, next) => {
 
 
         // Get remaining targets output look like this: [{ sceneCharacterId: 1, characterId: 1 }, { sceneCharacterId: 2, characterId: 2 }]
-        const getRemainingTargets = async () => {
+        const getRemainingTargets = async (db = prisma) => {
             const gameSessionId = Number(req.body.gameSessionId);
-            const targets = await prisma.gameSessionCharacter.findMany({
+            const targets = await db.gameSessionCharacter.findMany({
                 where: {
                     gameSessionId,
                     foundAt: null,
@@ -171,7 +171,7 @@ export const verifyGuess = async (req, res, next) => {
         const result = await prisma.$transaction(async (tx) => {
             const game = await tx.gameSession.findUnique({
                 where: { id: gameSessionId },
-                select: { sceneId: true, status: true },
+                select: { sceneId: true, status: true, startedAt: true },
             });
 
             if (!game || game.sceneId !== sceneId) {
@@ -291,11 +291,17 @@ export const verifyGuess = async (req, res, next) => {
            
             // Complete the game when all targets are found
             let status = "IN_PROGRESS";
-
+            let completedAt = null;
+            let score = null;
             if (remainingCount === 0) {
+                completedAt = new Date();
+
+                const elapsedTimeInSeconds = (completedAt - game.startedAt) / 1000;
+                score = Math.max(0, 10000 - elapsedTimeInSeconds * 10);
+
                 await tx.gameSession.update({
                     where: { id: gameSessionId },
-                    data: { status: "COMPLETED" },
+                    data: { status: "COMPLETED", completedAt, score, },
 
                 });
 
@@ -308,7 +314,10 @@ export const verifyGuess = async (req, res, next) => {
                     foundAt,
                     alreadyFound: false,
                     remainingCount,
+                    remainingTargets: await getRemainingTargets(),
                     status,
+                    completedAt,
+                    score,
                 }
 
         });
@@ -338,7 +347,7 @@ export const verifyGuess = async (req, res, next) => {
 
         //  console.log("Game controller - Remaining Targets: ", await getRemainingTargets())
 
-        return res.status(200).json(result, { remainingTargets: await getRemainingTargets() });
+        return res.status(200).json(result);
     } catch (error) {
         next(error)
     }
