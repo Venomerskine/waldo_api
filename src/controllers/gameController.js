@@ -386,6 +386,7 @@ export const startGame = async (req, res, next) => {
 
             return tx.gameSession.create({
                 data: {
+                    userId: req.user?.id || null,
                     sceneId,
                     status: "IN_PROGRESS",
                     characters: {
