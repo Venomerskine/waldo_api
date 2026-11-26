@@ -8,7 +8,7 @@ import { getRemainingTargets } from "../controllers/gameController.js";
 
 const router = express.Router();
 
-router.get("/", getAllScenes)
+router.get("/home", getAllScenes)
 router.get("/scenes/:sceneId", getSceneById)
 router.post("/scenes/:sceneId/verify-guess", verifyGuess)
 router.post("/scenes/:sceneId/startGame", startGame)
